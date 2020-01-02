@@ -1,26 +1,73 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Navbar from "./components/navbar";
+import "./App.css";
+import NavbarListener from "./listeners/navabarListener";
+import Projects from "./components/projects";
+import ProjectTree from "./components/projectTree";
+import Settings from "./components/settings";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  PROJECT_CONTAINER_CODE = "projects";
+  SETTINGS_CONTAINER_CODE = "settings";
+
+  state = {
+    navbarItems: [
+      { code: this.PROJECT_CONTAINER_CODE, label: "Projects", active: true },
+      { code: this.SETTINGS_CONTAINER_CODE, label: "Settings", active: false }
+    ]
+  };
+
+  render() {
+    return (
+      <React.Fragment>
+        <Router>
+          <Navbar
+            navbarItems={this.state.navbarItems}
+            navbarListener={this.getNavbarListener()}
+          />
+          <main className="container">
+            <Route exact path="/" component={Projects} />
+            <Route
+              exact
+              path={"/" + this.PROJECT_CONTAINER_CODE}
+              render={props => (
+                <Projects
+                  {...props}
+                  projectsCode={this.PROJECT_CONTAINER_CODE}
+                />
+              )}
+            />
+            <Route
+              path={"/" + this.PROJECT_CONTAINER_CODE + "/tree/:projectId"}
+              component={ProjectTree}
+            />
+            <Route
+              path={"/" + this.SETTINGS_CONTAINER_CODE}
+              component={Settings}
+            />
+          </main>
+        </Router>
+      </React.Fragment>
+    );
+  }
+
+  getNavbarListener() {
+    return new NavbarListener(code => this.navbarItemClicked(code));
+  }
+
+  navbarItemClicked(code) {
+    this.state.navbarItems.forEach(item => {
+      if (item.code === code) {
+        item.active = true;
+      } else {
+        item.active = false;
+      }
+    });
+
+    let updatedItems = [...this.state.navbarItems];
+    this.setState({ navbarItems: updatedItems });
+  }
 }
 
 export default App;

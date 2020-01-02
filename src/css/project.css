@@ -1,0 +1,18 @@
+.project {
+  font-size: 1em;
+  text-align: center;
+  margin-top: 3em;
+  margin-right: 2em;
+  padding: 1.5em;
+  color: black;
+  background-color: rgb(210, 231, 255);
+  border: 0.05em solid grey;
+}
+
+.project p {
+  padding-top: 1.5em;
+}
+
+.project a {
+  color: black;
+}
