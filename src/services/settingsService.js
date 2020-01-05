@@ -5,6 +5,6 @@ export function getSettings() {
       password: "asdf"
     },
     projectsType: "maven",
-    projectsRootDirectories: "/home/slidem/Development/git-sources"
+    projectsRootDirecto1ries: "/home/slidem/Development/git-sources"
   };
 }

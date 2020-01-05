@@ -70,3 +70,17 @@ export function getProjectTree(projectId) {
     ]
   };
 }
+
+export function getProjectInfo(projectId) {
+  return {
+    projectId: projectId,
+    projectType: "maven",
+    path: "/some/path",
+    version: "0.0.1-SNAPSHOT",
+    details: {
+      artifactId: "projectArtifact",
+      groupId: "groupId",
+      scope: "compile"
+    }
+  };
+}

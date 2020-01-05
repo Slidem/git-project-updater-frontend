@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Navbar from "./components/navbar";
 import "./App.css";
 import NavbarListener from "./listeners/navabarListener";
+import NavbarComponentListener from "./listeners/navbarComponentListener";
 import Projects from "./components/projects";
 import ProjectTree from "./components/projectTree";
 import Settings from "./components/settings";
@@ -10,11 +11,13 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 class App extends Component {
   PROJECT_CONTAINER_CODE = "projects";
   SETTINGS_CONTAINER_CODE = "settings";
+  LOGS_CONTAINER_CODE = "logs";
 
   state = {
     navbarItems: [
       { code: this.PROJECT_CONTAINER_CODE, label: "Projects", active: true },
-      { code: this.SETTINGS_CONTAINER_CODE, label: "Settings", active: false }
+      { code: this.SETTINGS_CONTAINER_CODE, label: "Settings", active: false },
+      { code: this.LOGS_CONTAINER_CODE, label: "Logs", active: false }
     ]
   };
 
@@ -26,17 +29,16 @@ class App extends Component {
             navbarItems={this.state.navbarItems}
             navbarListener={this.getNavbarListener()}
           />
-          <main className="container">
-            <Route exact path="/" component={Projects} />
+          <main className="container-fluid">
+            <Route
+              exact
+              path="/"
+              render={this.routeRenderProjectsComponent()}
+            />
             <Route
               exact
               path={"/" + this.PROJECT_CONTAINER_CODE}
-              render={props => (
-                <Projects
-                  {...props}
-                  projectsCode={this.PROJECT_CONTAINER_CODE}
-                />
-              )}
+              render={this.routeRenderProjectsComponent()}
             />
             <Route
               path={"/" + this.PROJECT_CONTAINER_CODE + "/tree/:projectId"}
@@ -44,7 +46,7 @@ class App extends Component {
             />
             <Route
               path={"/" + this.SETTINGS_CONTAINER_CODE}
-              component={Settings}
+              render={this.routeRenderSettingsComponent()}
             />
           </main>
         </Router>
@@ -52,11 +54,37 @@ class App extends Component {
     );
   }
 
-  getNavbarListener() {
-    return new NavbarListener(code => this.navbarItemClicked(code));
+  routeRenderProjectsComponent() {
+    return props => (
+      <Projects
+        {...props}
+        navbarComponentListener={this.getNavbarItemComponentListener()}
+        navbarItemCode={this.PROJECT_CONTAINER_CODE}
+      />
+    );
   }
 
-  navbarItemClicked(code) {
+  routeRenderSettingsComponent() {
+    return props => (
+      <Settings
+        {...props}
+        navbarComponentListener={this.getNavbarItemComponentListener()}
+        navbarItemCode={this.SETTINGS_CONTAINER_CODE}
+      />
+    );
+  }
+
+  getNavbarListener() {
+    const onNavbarItemClicked = code => this.navbarItemActivated(code);
+    return new NavbarListener(onNavbarItemClicked);
+  }
+
+  getNavbarItemComponentListener() {
+    const onNavbarDefinedItemMounted = code => this.navbarItemActivated(code);
+    return new NavbarComponentListener(onNavbarDefinedItemMounted);
+  }
+
+  navbarItemActivated(code) {
     this.state.navbarItems.forEach(item => {
       if (item.code === code) {
         item.active = true;

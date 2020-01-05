@@ -1,18 +1,21 @@
 .settings-container {
   margin-top: 10em;
   width: 40em;
-  text-align: center;
+  text-align: left;
   border: 0.05em solid grey;
   border-radius: 0.5em;
   padding: 2em;
 }
 
-.settings-container img {
-  height: 5em;
-  width: 5em;
+.settings-container .row:nth-child(1) div:nth-child(1) {
+  padding-top: 1em;
 }
 
-.settings-container .table td {
-  text-align: left;
-  padding: 3em;
+.settings-icon {
+  width: 4em;
+  height: 4em;
+}
+
+.settings-container .row:not(:nth-child(1)):not(:nth-child(5)) {
+  border-bottom: 0.01em solid grey;
 }

@@ -1,48 +1,42 @@
-import React, { Component } from "react";
+import React from "react";
 import settingsIcon from "../img/settingsIcon.png";
 import "../css/settings.css";
 import * as settingsService from "../services/settingsService";
+import NavbarDefinedComponent from "./fromNavbarComponent";
 
-class Settings extends Component {
+class Settings extends NavbarDefinedComponent {
   render() {
     let settings = this.getSettings();
 
     return (
       <div className="settings-container mx-auto">
-        <div className="settings-tab">
-          <div className="row">
-            <div className="col-sm-8">
-              <h5>Settings</h5>
-            </div>
-            <div className="col-sm-4">
-              <img
-                src={settingsIcon}
-                alt="settings icon"
-                className="mx-auto d-block"
-              />
-            </div>
+        <div className="row">
+          <div className="col-sm-2">
+            <h5>Settings</h5>
           </div>
-          <div className="row">
-            <table className="table"></table>
-            <tbody>
-              <tr>
-                <td>Git username</td>
-                <td>{settings.gitUsername}</td>
-              </tr>
-              <tr>
-                <td>Git password</td>
-                <td>{settings.gitPassword}</td>
-              </tr>
-              <tr>
-                <td>Projects type</td>
-                <td>{settings.projectType}</td>
-              </tr>
-              <tr>
-                <td>Projects root directory</td>
-                <td>{settings.projectsRootDirectories}</td>
-              </tr>
-            </tbody>
+          <div className="col-sm-3">
+            <img
+              src={settingsIcon}
+              alt="settings icon"
+              className="mx-auto d-block settings-icon"
+            />
           </div>
+        </div>
+        <div className="row">
+          <div className="col-sm">Git username</div>
+          <div className="col-sm">{settings.gitUsername}</div>
+        </div>
+        <div className="row">
+          <div className="col-sm">Git password</div>
+          <div className="col-sm">{settings.gitPassword}</div>
+        </div>
+        <div className="row">
+          <div className="col-sm">Projects type</div>
+          <div className="col-sm">{settings.projectType}</div>
+        </div>
+        <div className="row">
+          <div className="col-sm">Projects root directory</div>
+          <div className="col-sm">{settings.projectsRootDirectories}</div>
         </div>
       </div>
     );

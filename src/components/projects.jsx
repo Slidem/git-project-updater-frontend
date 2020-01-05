@@ -1,37 +1,54 @@
-import React, { Component } from "react";
+import React from "react";
 import * as projectsService from "../services/projectsService";
 import "../css/projects.css";
 import Project from "./project";
+import NavbarDefinedComponent from "./fromNavbarComponent";
 
-class Projects extends Component {
-  MAX_PROJECTS_ON_ROW = 3;
+class Projects extends NavbarDefinedComponent {
+  static MAX_PROJECTS_ON_ROW = 3;
+
+  static DEFAULT_PROJECTS_CODE = "projects";
 
   render() {
     return <div className="projects-container">{this.getRows()}</div>;
   }
 
   getRows() {
-    let projects = projectsService.getProjects();
-    let rows = [];
+    const projects = projectsService.getProjects();
+    const rows = [];
     let row = [];
+    let rowCount = 1;
     let count = 0;
     for (const [projectId, project] of Object.entries(projects)) {
       count += 1;
       row.push(
-        <div className="col-sm">
+        <div key={projectId} className="col-sm">
           <Project
             projectId={projectId}
             projectType={project.type}
-            projectsCode={this.props.projectsCode}
+            linkRoot={this.getLinkRoot()}
           />
         </div>
       );
-      if (count % this.MAX_PROJECTS_ON_ROW === 0) {
-        rows.push(<div className="row">{row}</div>);
+      if (count % Projects.MAX_PROJECTS_ON_ROW === 0) {
+        rows.push(
+          <div key={rowCount} className="row">
+            {row}
+          </div>
+        );
         row = [];
+        rowCount += 1;
       }
     }
     return rows;
+  }
+
+  getLinkRoot() {
+    let projectsCode = this.props.navbarItemCode;
+    if (!projectsCode) {
+      projectsCode = Projects.DEFAULT_PROJECTS_CODE;
+    }
+    return projectsCode + "/tree/";
   }
 }
 

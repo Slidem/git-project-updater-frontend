@@ -1,0 +1,13 @@
+.step-header-container {
+  border-bottom: 0.01em solid black;
+}
+
+.step-header-enabled {
+  color: black;
+  border-bottom: 0.01em solid black;
+}
+
+.step-header-disabled {
+  color: grey;
+  border-bottom: 0.01em solid grey;
+}

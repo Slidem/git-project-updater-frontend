@@ -9,10 +9,7 @@ class Project extends Component {
 
     return (
       <div className="project">
-        <Link
-          to={this.props.projectsCode + "/tree/" + this.props.projectId}
-          className="row"
-        >
+        <Link to={this.props.linkRoot + this.props.projectId} className="row">
           <div className="col-sm-8">
             <p>{this.props.projectId}</p>
           </div>

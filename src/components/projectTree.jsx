@@ -1,4 +1,5 @@
 import React, { PureComponent } from "react";
+import ProjectMenu from "./projectMenu";
 import * as projectsService from "../services/projectsService";
 import "../css/treeContainer.css";
 import Tree from "react-d3-tree";
@@ -7,15 +8,16 @@ class ProjectTree extends PureComponent {
   state = {};
 
   render() {
-    let projectId = this.props.match.params.projectId;
-    let projectDependencyTree = this.renderProjectDependencyTree(projectId);
+    const projectId = this.props.match.params.projectId;
+    const projectDependencyTree = this.renderProjectDependencyTree(projectId);
+    const projectMenu = <ProjectMenu />;
 
     return (
-      <div
-        className="project-dependencytree-container"
-        ref={tc => (this.treeContainer = tc)}
-      >
-        {projectDependencyTree}
+      <div className="project-dependencytree-container row">
+        <div ref={tc => (this.treeContainer = tc)} className="col-sm-7">
+          {projectDependencyTree}
+        </div>
+        <div className="col-sm-5 container">{projectMenu}</div>
       </div>
     );
   }
@@ -25,7 +27,7 @@ class ProjectTree extends PureComponent {
     this.setState({
       translate: {
         x: dimensions.width / 2,
-        y: dimensions.height / 5
+        y: dimensions.height / 8
       }
     });
   }
@@ -38,7 +40,7 @@ class ProjectTree extends PureComponent {
       <Tree
         data={treeData}
         nodeSvgShape={this.getNodeShape()}
-        collapsible="true"
+        collapsible={false}
         orientation="vertical"
         translate={this.state.translate}
         separation={{
