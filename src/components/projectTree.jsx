@@ -14,10 +14,10 @@ class ProjectTree extends PureComponent {
 
     return (
       <div className="project-dependencytree-container row">
-        <div ref={tc => (this.treeContainer = tc)} className="col-sm-7">
+        <div ref={tc => (this.treeContainer = tc)} className="col-sm-8">
           {projectDependencyTree}
         </div>
-        <div className="col-sm-5 container">{projectMenu}</div>
+        <div className="col-sm container">{projectMenu}</div>
       </div>
     );
   }
