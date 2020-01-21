@@ -101,7 +101,7 @@ export function getProjectGitInfo(projectId) {
     workingDir: {
       modified: ["/mod/a", "/mod/b", "/mod/c"],
       newFiles: ["/new/a", "/new/b", "/new/c"],
-      deleted: [["/deleted/a", "/deleted/b", "/deleted/c"]]
+      deleted: ["/deleted/a", "/deleted/b", "/deleted/c"]
     }
   };
 }

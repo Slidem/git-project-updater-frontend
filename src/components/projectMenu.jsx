@@ -12,7 +12,9 @@ class ProjectMenu extends Component {
 
   render() {
     const menuType = this.chooseMenyTypeBasedOnActionType();
-    return <div className="project-menu-container">{menuType}</div>;
+    return (
+      <div className="project-menu-container overflow-auto">{menuType}</div>
+    );
   }
 
   chooseMenyTypeBasedOnActionType() {
@@ -34,14 +36,15 @@ class ProjectMenu extends Component {
       <React.Fragment>
         <div className="row">
           <TakeAction
+            projectId={this.props.projectId}
             onActionButtonClicked={() => this.updateTakingAction(true)}
           />
         </div>
         <div className="row actions-row">
-          <ProjectTypeInfo />
+          <ProjectTypeInfo projectId={this.props.projectId} />
         </div>
         <div className="row actions-row">
-          <GitInfo />
+          <GitInfo projectId={this.props.projectId} />
         </div>
       </React.Fragment>
     );
