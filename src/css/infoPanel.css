@@ -1,6 +1,7 @@
 .info-panel-container {
   padding-top: 1em;
   padding-bottom: 1em;
+  border-top: 0.1em solid grey;
 }
 
 .info-panel-row{

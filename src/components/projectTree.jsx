@@ -33,7 +33,7 @@ class ProjectTree extends Component {
         <div ref={tc => (this.treeContainer = tc)} className="col-sm-8">
           {this.renderProjectDependencyTree()}
         </div>
-        <div className="col-sm container">
+        <div className="project-menu-container container overflow-auto">
           <ProjectMenu projectId={this.state.selectedProjectId} />
         </div>
       </div>

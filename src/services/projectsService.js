@@ -1,34 +1,9 @@
-export function getProjects() {
-  return {
-    projectA: {
-      id: "projectA",
-      type: "maven"
-    },
-    projectB: {
-      id: "projectB",
-      type: "maven"
-    },
-    projectC: {
-      id: "projectC",
-      type: "maven"
-    },
-    projectD: {
-      id: "projectD",
-      type: "maven"
-    },
-    projectE: {
-      id: "projectE",
-      type: "maven"
-    },
-    projectF: {
-      id: "projectF",
-      type: "maven"
-    },
-    projectG: {
-      id: "projectG",
-      type: "maven"
-    }
-  };
+import * as apiRegistry from "../registry/apiRegistry"
+import httpService from "./httpService"
+
+export async function getProjectIds(){
+  const p = await httpService.get(apiRegistry.getProjectsUrl());
+  return p.data;
 }
 
 export function getProjectTree(projectId) {

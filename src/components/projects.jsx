@@ -6,26 +6,40 @@ import NavbarDefinedComponent from "./fromNavbarComponent";
 
 class Projects extends NavbarDefinedComponent {
   static MAX_PROJECTS_ON_ROW = 3;
-
   static DEFAULT_PROJECTS_CODE = "projects";
+
+
+  state = {
+    projectIds: []
+  }
+
+  componentDidMount(){
+    super.componentDidMount();
+    projectsService.getProjectIds().then(projectIds => {
+      this.setState({projectIds})
+    });
+  }
 
   render() {
     return <div className="projects-container">{this.getRows()}</div>;
   }
 
   getRows() {
-    const projects = projectsService.getProjects();
     const rows = [];
     let row = [];
     let rowCount = 1;
     let count = 0;
-    for (const [projectId, project] of Object.entries(projects)) {
+    if (! this.state.projectIds){
+      return;
+    }
+    for (const projectId of this.state.projectIds) {
       count += 1;
       row.push(
         <div key={projectId} className="col-sm">
           <Project
             projectId={projectId}
-            projectType={project.type}
+            //TODO: get project type from settings service
+            projectType="maven"
             linkRoot={this.getLinkRoot()}
           />
         </div>

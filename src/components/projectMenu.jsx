@@ -11,13 +11,6 @@ class ProjectMenu extends Component {
   };
 
   render() {
-    const menuType = this.chooseMenyTypeBasedOnActionType();
-    return (
-      <div className="project-menu-container overflow-auto">{menuType}</div>
-    );
-  }
-
-  chooseMenyTypeBasedOnActionType() {
     if (this.state.takingAction) {
       return this.renderActionMenu();
     } else {

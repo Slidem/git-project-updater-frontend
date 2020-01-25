@@ -1,6 +1,8 @@
 .project-menu-container {
   border-left: 0.1em solid black;
-  padding: 3em;
-  height: 65em;
-  font-size: 14px;
+  padding: 2em;
+  width: 40em !important;
+  font-size: 12px;
+  position: absolute;
+  right:0;
 }
