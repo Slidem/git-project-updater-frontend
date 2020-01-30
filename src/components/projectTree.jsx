@@ -14,17 +14,13 @@ class ProjectTree extends Component {
   constructor(props){
     super(props);
     this.state = {
-      dependencyTree: this.getDependencyTree(props),
+      dependencyTree: {},
       projectId: props.match.params.projectId,
       selectedProjectId: props.match.params.projectId,
       treeState: "info",
       clicked: false,
       selectedNodes: {}
     }
-  }
-
-  getDependencyTree(props) {
-    return projectsService.getProjectTree(props.match.projectId);     
   }
 
   render() {
@@ -48,6 +44,11 @@ class ProjectTree extends Component {
         y: dimensions.height / 8
       },
     });
+    this.updateDependencyTree();
+  }
+
+  updateDependencyTree() {
+    return projectsService.getProjectTree(this.props.match.params.projectId).then(dependencyTree => this.setState({dependencyTree}));     
   }
 
   renderProjectDependencyTree() {
@@ -78,11 +79,14 @@ class ProjectTree extends Component {
   };
 
   getTreeData() {
-    console.log(this.state.dependencyTree);
     return this.dependencyTreeToTreeDataMap(this.state.dependencyTree);
   }
 
   dependencyTreeToTreeDataMap(node) {
+    if(Object.entries(node).length === 0 && node.constructor === Object){
+      return {}
+    }
+    
     const data = {};
 
     data.name = node.projectId;
@@ -99,11 +103,13 @@ class ProjectTree extends Component {
     data.nodeSvgShape = this.getNodeShape(node.projectId);
 
     // compute children recursively
-    const children = [];
-    for (const c of node.children) {
-      children.push(this.dependencyTreeToTreeDataMap(c));
+    const dependencies = [];
+    if(node.dependencies){
+      for (const c of node.dependencies) {
+        dependencies.push(this.dependencyTreeToTreeDataMap(c));
+      }
     }
-    data.children = children;
+   data.children = dependencies;
 
     return data;
   }

@@ -4,14 +4,21 @@ import "../css/projectInfo.css";
 import InfoPanel from "./infoPanel";
 
 class ProjectTypeInfo extends Component {
-  render() {
-    const projectInfo = this.getProjectInfo();
 
+  state = {
+    projectInfo : {}
+  }
+ 
+  componentDidMount(){
+    projectsService.getProjectInfo(this.props.projectId).then(projectInfo => this.setState({projectInfo}));
+  }
+
+  render() {
     return (
       <InfoPanel
         title={"Project"}
-        rows={this.getProjectInfoAsPanelRows(projectInfo)}
-        additionalData={this.renderDetailsAsJson(projectInfo)}
+        rows={this.getProjectInfoAsPanelRows(this.state.projectInfo)}
+        additionalData={this.renderDetailsAsJson(this.state.projectInfo)}
       />
     );
   }

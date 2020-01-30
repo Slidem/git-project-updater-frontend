@@ -6,58 +6,14 @@ export async function getProjectIds(){
   return p.data;
 }
 
-export function getProjectTree(projectId) {
-  return {
-    projectId: "projectA",
-    version: "0.0.1-SNAPSHOT",
-    children: [
-      {
-        projectId: "cA",
-        version: "0.0.2-SNAPSHOT",
-        versionUsed: "0.0.1",
-        children: []
-      },
-      {
-        projectId: "cB",
-        version: "0.0.3-SNAPSHOT",
-        versionUsed: "0.0.2",
-        children: []
-      },
-      {
-        projectId: "cC",
-        version: "0.0.1-SNAPSHOT",
-        versionUsed: "0.0.1-SNAPSHOT",
-        children: [
-          {
-            projectId: "ccA",
-            version: "0.0.2-SNAPSHOT",
-            versionUsed: "0.0.1",
-            children: []
-          },
-          {
-            projectId: "ccB",
-            version: "0.0.3-SNAPSHOT",
-            versionUsed: "0.0.2",
-            children: []
-          }
-        ]
-      }
-    ]
-  };
+export async function getProjectTree(projectId) {
+  const p = await httpService.get(apiRegistry.getProjectsUrl() + "/" + projectId + "/tree");
+  return p.data;
 }
 
-export function getProjectInfo(projectId) {
-  return {
-    projectId: projectId,
-    projectType: "maven",
-    path: "/some/path",
-    version: "0.0.1-SNAPSHOT",
-    details: {
-      artifactId: "projectArtifact",
-      groupId: "groupId",
-      scope: "compile"
-    }
-  };
+export async function getProjectInfo(projectId) {
+  const p = await httpService.get(apiRegistry.getProjectsUrl() + "/" + projectId + "/info");
+  return p.data;
 }
 
 export function getProjectGitInfo(projectId) {
