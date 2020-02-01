@@ -1,16 +1,13 @@
 import React, { Component } from "react";
-import * as projectsService from "../services/projectsService";
-import InfoTitle from "./infoTitle";
 import InfoPanel from "./infoPanel";
 import FileList from "./fileList";
 
 class GitInfo extends Component {
   render() {
-    const gitInfo = this.getGitInfo();
     const panelTitle = this.renderPanelTitle();
-    const gitBranchInfoPanel = this.renderGitBranchInfoPanel(gitInfo);
-    const gitLastCommitPanel = this.renderGitLastCommitPanel(gitInfo);
-    const gitWorkDirPanel = this.renderGitWorkDirData(gitInfo);
+    const gitBranchInfoPanel = this.renderGitBranchInfoPanel(this.props.projectGitInfo);
+    const gitLastCommitPanel = this.renderGitLastCommitPanel(this.props.projectGitInfo);
+    const gitWorkDirPanel = this.renderGitWorkDirData(this.props.projectGitInfo);
 
     return (
       <div className="project-type-info-container col-sm">
@@ -22,10 +19,6 @@ class GitInfo extends Component {
     );
   }
 
-  getGitInfo() {
-    return projectsService.getProjectGitInfo();
-  }
-
   renderPanelTitle() {
     return (
       <div className="row">
@@ -35,6 +28,9 @@ class GitInfo extends Component {
   }
 
   renderGitBranchInfoPanel(gitInfo) {
+    if (!gitInfo){
+      return null;
+    }
     return (
       <div className="row">
         <InfoPanel
@@ -46,6 +42,9 @@ class GitInfo extends Component {
   }
 
   renderGitLastCommitPanel(gitInfo) {
+    if (!gitInfo){
+      return null;
+    }
     return (
       <div className="row">
         <InfoPanel
@@ -56,7 +55,31 @@ class GitInfo extends Component {
     );
   }
 
+  getGitBranchInfoAsRows(gitInfo) {
+    return {
+      "Local branch": gitInfo.branch.local,
+      "Remote branch": gitInfo.branch.remote
+    };
+  }
+
+   
+  
+  getGitLastCommitInfoAsRows(gitInfo) {
+    const lastCommit = gitInfo.lastCommit;
+    return {
+      "Commit date": lastCommit.date,
+      "Author name": lastCommit.authorName,
+      "Author email": lastCommit.authorEmail,
+      "Commit message": lastCommit.message
+    };
+  }
+
+
   renderGitWorkDirData(gitInfo) {
+    if (!gitInfo){
+      return null;
+    }
+
     const { modified, newFiles, deleted } = gitInfo.workingDir;
     return (
       <div className="col-sm">
@@ -84,23 +107,7 @@ class GitInfo extends Component {
       </div>
     );
   }
-
-  getGitBranchInfoAsRows(gitInfo) {
-    return {
-      "Local branch": gitInfo.branch.local,
-      "Remote branch": gitInfo.branch.remote
-    };
-  }
-
-  getGitLastCommitInfoAsRows(gitInfo) {
-    const lastCommit = gitInfo.lastCommit;
-    return {
-      "Commit date": lastCommit.date,
-      "Author name": lastCommit.authorName,
-      "Author email": lastCommit.authorEmail,
-      "Commit message": lastCommit.message
-    };
-  }
+ 
 }
 
 export default GitInfo;

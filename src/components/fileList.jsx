@@ -3,7 +3,7 @@ import React, { Component } from "react";
 class FileList extends Component {
   render() {
     return (
-      <div className="file-list-container">
+      <div className="file-list-container container">
         <div className="row" style={{ color: this.props.folderTitleColor }}>
           <div className="col-sm">
             <h5>
@@ -21,7 +21,7 @@ class FileList extends Component {
     const rows = [];
     for (const file of this.props.files) {
       rows.push(
-        <div className="row">
+        <div className="row" key="file">
           <div className="col-sm offset-sm-1 file-list-item">{file}</div>
         </div>
       );

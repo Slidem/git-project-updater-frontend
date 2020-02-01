@@ -29,15 +29,14 @@ class ProjectMenu extends Component {
       <React.Fragment>
         <div className="row">
           <TakeAction
-            projectId={this.props.projectId}
             onActionButtonClicked={() => this.updateTakingAction(true)}
           />
         </div>
         <div className="row actions-row">
-          <ProjectTypeInfo projectId={this.props.projectId} />
+          <ProjectTypeInfo projectTypeInfo={this.props.projectTypeInfo} />
         </div>
         <div className="row actions-row">
-          <GitInfo projectId={this.props.projectId} />
+          <GitInfo projectGitInfo={this.props.projectGitInfo} />
         </div>
       </React.Fragment>
     );

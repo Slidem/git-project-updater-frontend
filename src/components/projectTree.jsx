@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import ProjectMenu from "./projectMenu";
 import * as projectsService from "../services/projectsService";
+import * as dependencyTreeUtils from "../utils/dependencyTreeUtils";
 import "../css/treeContainer.css";
 import Tree from "react-d3-tree";
 
 class ProjectTree extends Component {
+
   // on info state, when clicking a node, color remains the same, and a node clicked event is fired up
   INFO_TREE_STATE = "info";
 
@@ -17,9 +19,11 @@ class ProjectTree extends Component {
       dependencyTree: {},
       projectId: props.match.params.projectId,
       selectedProjectId: props.match.params.projectId,
+      selectedProjectTypeInfo: null,
+      selectedProjectGitInfo: null,
       treeState: "info",
       clicked: false,
-      selectedNodes: {}
+      selectedNodes: null
     }
   }
 
@@ -30,7 +34,11 @@ class ProjectTree extends Component {
           {this.renderProjectDependencyTree()}
         </div>
         <div className="project-menu-container container overflow-auto">
-          <ProjectMenu projectId={this.state.selectedProjectId} />
+          <ProjectMenu 
+              projectTypeInfo={this.state.selectedProjectTypeInfo}
+              projectGitInfo={this.state.selectedProjectGitInfo}
+              selectedNodes={this.state.selectedNodes}
+              />
         </div>
       </div>
     );
@@ -45,10 +53,14 @@ class ProjectTree extends Component {
       },
     });
     this.updateDependencyTree();
+    this.updateNodeSelections(this.props.match.params.projectId);
+    this.updateSelectedProjectInfo(this.props.match.params.projectId);
   }
 
   updateDependencyTree() {
-    return projectsService.getProjectTree(this.props.match.params.projectId).then(dependencyTree => this.setState({dependencyTree}));     
+    return projectsService.getProjectTree(this.props.match.params.projectId).then(dependencyTree => 
+      this.setState({dependencyTree: dependencyTree, selectedNodes: this.initializeSelectedNodes(dependencyTree)})
+    );     
   }
 
   renderProjectDependencyTree() {
@@ -76,7 +88,16 @@ class ProjectTree extends Component {
     const projectId = data.name;
     this.setState({clicked : true, selectedProjectId: projectId})
     this.updateNodeSelections(projectId);
+    this.updateSelectedProjectInfo(projectId);
   };
+
+  updateSelectedProjectInfo(projectId){
+    projectsService.getProjectInfo(projectId).then(projectInfo => {
+      this.setState({selectedProjectTypeInfo : projectInfo});
+      this.setState({selectedProjectGitInfo: projectInfo.git});
+    });      
+  }
+  
 
   getTreeData() {
     return this.dependencyTreeToTreeDataMap(this.state.dependencyTree);
@@ -88,7 +109,6 @@ class ProjectTree extends Component {
     }
     
     const data = {};
-
     data.name = node.projectId;
 
     const attributes = {
@@ -139,8 +159,7 @@ class ProjectTree extends Component {
   }
 
   updateNodeSelections(selectedProjectId) {
-    const newSelection = { ...this.state.selectedNodes };
-
+    let newSelection = { ...this.state.selectedNodes };
     if(this.state.treeState === "info"){
       for(const projectId in newSelection){
         if(projectId !== selectedProjectId){
@@ -154,6 +173,14 @@ class ProjectTree extends Component {
       selectedNodes: newSelection
     });
   }
+
+  initializeSelectedNodes(rootNode){
+      const selectedNodes = {};
+      const ids = dependencyTreeUtils.getDependencyTreeIds(rootNode);
+      ids.forEach(id => selectedNodes[id] = false);
+      return selectedNodes;
+  }
+  
 }
 
 export default ProjectTree;

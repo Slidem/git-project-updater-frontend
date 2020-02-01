@@ -1,33 +1,24 @@
 import React, { Component } from "react";
-import * as projectsService from "../services/projectsService";
 import "../css/projectInfo.css";
 import InfoPanel from "./infoPanel";
 
 class ProjectTypeInfo extends Component {
 
-  state = {
-    projectInfo : {}
-  }
- 
-  componentDidMount(){
-    projectsService.getProjectInfo(this.props.projectId).then(projectInfo => this.setState({projectInfo}));
-  }
-
   render() {
     return (
       <InfoPanel
         title={"Project"}
-        rows={this.getProjectInfoAsPanelRows(this.state.projectInfo)}
-        additionalData={this.renderDetailsAsJson(this.state.projectInfo)}
+        rows={this.getProjectInfoAsPanelRows(this.props.projectTypeInfo)}
+        additionalData={this.renderDetailsAsJson(this.props.projectTypeInfo)}
       />
     );
   }
 
-  getProjectInfo() {
-    return projectsService.getProjectInfo(this.props.projectId);
-  }
-
   renderDetailsAsJson(projectInfo) {
+    if(!projectInfo){
+      return "";
+    }
+
     return (
       <div className="project-details-container col-sm">
         <div class="row">
@@ -45,6 +36,10 @@ class ProjectTypeInfo extends Component {
   }
 
   getProjectInfoAsPanelRows(projectInfo) {
+    if(!projectInfo){
+      return {}
+    }
+
     return {
       "Project id": projectInfo.projectId,
       "Project type": projectInfo.projectType,
