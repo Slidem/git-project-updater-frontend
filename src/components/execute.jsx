@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Next extends Component {
+class Execute extends Component {
   render() {
     let containerClass = this.props.containerStyle;
     if (!containerClass) {
@@ -11,8 +11,8 @@ class Next extends Component {
       <div className={containerClass}>
         <button
           className="btn btn-default"
-          disabled={this.props.onNextDisabled}
-          onClick={this.props.onNextClicked}
+          onClick={this.props.onExecuteClicked}
+          disabled={this.props.executeDisabled}
         >
           <i className="fa fa-check" aria-hidden="true"></i>
         </button>
@@ -21,4 +21,4 @@ class Next extends Component {
   }
 }
 
-export default Next;
+export default Execute;

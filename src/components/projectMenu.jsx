@@ -1,49 +1,75 @@
 import React, { Component } from "react";
 import "../css/projectMenu.css";
-import TakeAction from "./takeAction";
-import ActionMenu from "./actionMenu";
+import ProjectActions from "./projectActions";
 import ProjectTypeInfo from "./projectTypeInfo";
 import GitInfo from "./gitInfo";
+import Action from "./action";
 
 class ProjectMenu extends Component {
   state = {
-    takingAction: false
+    actionType: "info",
+    actionCompleted: false
   };
 
   render() {
-    if (this.state.takingAction) {
-      return this.renderActionMenu();
-    } else {
+    if (this.state.actionType === "info") {
       return this.renderProjectInfo();
+    } else if (this.state.actionType === "gitUpdate") {
+      return this.renderGitUpdateAction();
+    } else if (this.state.actionType === "mavenBuild") {
+      return this.renderMavenBuildAction();
     }
-  }
-
-  renderActionMenu() {
-    return (
-      <ActionMenu actionMenuExited={() => this.updateTakingAction(false)} />
-    );
   }
 
   renderProjectInfo() {
     return (
       <React.Fragment>
-        <div className="row">
-          <TakeAction
-            onActionButtonClicked={() => this.updateTakingAction(true)}
+        <div className="row action-row container">
+          <ProjectActions
+            onActionButtonClicked={actionCode =>
+              this.updateTakingAction(actionCode)
+            }
           />
         </div>
-        <div className="row actions-row">
+        <div className="row project-type-info-row">
           <ProjectTypeInfo projectTypeInfo={this.props.projectTypeInfo} />
         </div>
-        <div className="row actions-row">
+        <div className="row git-info-row">
           <GitInfo projectGitInfo={this.props.projectGitInfo} />
         </div>
       </React.Fragment>
     );
   }
 
-  updateTakingAction(boolValue) {
-    this.setState({ takingAction: boolValue });
+  renderGitUpdateAction() {
+    return (
+      <Action
+        onActionExit={() => this.updateTakingAction("info")}
+        onActionExecuted={() => this.actionExecuted("gitUpdate")}
+        onActionCompleted={() => this.actionCompleted("gitUpdate")}
+        selectedProjects={this.props.selectedProjects}
+        actionCompleted={this.state.actionCompleted}
+        actionStatusText="Update git projects"
+      />
+    );
+  }
+
+  renderMavenBuildAction() {
+    return (
+      <Action
+        onActionExit={() => this.updateTakingAction("info")}
+        onActionExecuted={() => this.actionExecuted("mavenBuild")}
+        onActionCompleted={() => this.actionCompleted("mavenBuild")}
+        selectedProjects={this.props.selectedProjects}
+        actionCompleted={this.state.actionCompleted}
+        actionStatusText="Build maven projects"
+      />
+    );
+  }
+
+  updateTakingAction(actionCode) {
+    this.setState({ actionType: actionCode });
+    this.props.onSelectionStateChange(actionCode);
   }
 }
 

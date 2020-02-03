@@ -2,7 +2,12 @@
   border-left: 0.1em solid black;
   padding: 2em;
   width: 40em !important;
+  min-height: 75em;
   font-size: 12px;
   position: absolute;
   right:0;
+}
+
+.action-row {
+  padding: 2em;
 }

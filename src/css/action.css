@@ -1,0 +1,14 @@
+.status-container {
+    text-align: left;
+    border-top: 0.2em solid black;
+}
+
+
+.action-status-text-holder-container{
+    padding-top: 2.5em;
+}
+
+
+.status-container p {
+    text-align: right;
+}

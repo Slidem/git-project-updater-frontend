@@ -1,0 +1,8 @@
+.selected-projects-container {
+    padding: 2em;
+}
+
+.selected-project-label-container {
+    text-align: right;
+    font-weight: bold; 
+}

@@ -37,7 +37,8 @@ class ProjectTree extends Component {
           <ProjectMenu 
               projectTypeInfo={this.state.selectedProjectTypeInfo}
               projectGitInfo={this.state.selectedProjectGitInfo}
-              selectedNodes={this.state.selectedNodes}
+              selectedProjects={this.state.selectedNodes}
+              onSelectionStateChange={(menuAction) => this.treeStateChange(menuAction)}
               />
         </div>
       </div>
@@ -180,6 +181,23 @@ class ProjectTree extends Component {
       ids.forEach(id => selectedNodes[id] = false);
       return selectedNodes;
   }
+
+  treeStateChange(treeState){
+    if(treeState === "info"){
+      this.refreshProjectSelectionToRootSelected();
+      this.setState({treeState : "info"});
+    } else {
+      this.setState({treeState : "select"});
+    }
+  }
+  
+  refreshProjectSelectionToRootSelected(){
+    const selectedNodes = this.state.selectedNodes; 
+    for(const projectId in selectedNodes){
+        selectedNodes[projectId] = projectId === this.props.match.params.projectId;
+    } 
+  }
+
   
 }
 
