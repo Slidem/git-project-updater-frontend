@@ -35,7 +35,7 @@ class Projects extends NavbarDefinedComponent {
     for (const projectId of this.state.projectIds) {
       count += 1;
       row.push(
-        <div key={projectId} className="col-sm">
+        <div key={projectId} className="col-sm-4">
           <Project
             projectId={projectId}
             //TODO: get project type from settings service
@@ -46,6 +46,7 @@ class Projects extends NavbarDefinedComponent {
       );
       if (count % Projects.MAX_PROJECTS_ON_ROW === 0) {
         rows.push(
+
           <div key={rowCount} className="row">
             {row}
           </div>
@@ -53,6 +54,14 @@ class Projects extends NavbarDefinedComponent {
         row = [];
         rowCount += 1;
       }
+    }
+
+    if(row.length !== 0){
+      rows.push(
+          <div key={rowCount} className="row">
+            {row}
+          </div>
+      )
     }
     return rows;
   }
