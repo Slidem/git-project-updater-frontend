@@ -15,3 +15,8 @@ export async function getProjectInfo(projectId) {
   const p = await httpService.get(apiRegistry.getProjectsUrl() + "/" + projectId + "/info");
   return p.data;
 }
+
+export async function updateProject(projectId){
+  const result = await httpService.post(apiRegistry.getProjectsUrl() + "/" + projectId + "/git", {});
+  return result.data;
+}
