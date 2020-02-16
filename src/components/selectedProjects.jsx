@@ -10,7 +10,6 @@ class SelectedProjects extends Component {
   }
 
   renderSelectedProjects() {
-    console.log(this.props.selectedProjects);
     const selectedProjects = this.props.selectedProjects;
     const rendered = [];
     for (const projectId in selectedProjects) {

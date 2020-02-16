@@ -5,14 +5,35 @@ import ProjectTypeInfo from "./projectTypeInfo";
 import GitInfo from "./gitInfo";
 import Action from "./action";
 import * as projectsService from "../services/projectsService";
+import ProjectActionExecution from "../services/projectActionExecution";
 
 class ProjectMenu extends Component {
-  state = {
-    actionType: "info",
-    actionCompleted: false,
-    actionTaken: false,
-    actionStatusText: ""
-  };
+
+  constructor(props){
+      super(props);
+      this.state = {
+        actionType: "info",
+        actionCompleted: false,
+        actionTaken: false,
+        actionStatusText: ""
+      }; 
+
+      this.updateGitProjectActionExecution = new ProjectActionExecution(
+        this,
+        (projectId) => projectsService.updateProject(projectId),
+        "Updating git projects...",
+        "Update of git projects finished successfully",
+        "Update of git projects failed... Check logs"
+      );
+
+      this.buildMavenProjectsActionExecution =new ProjectActionExecution(
+        this,
+        (projectId) => projectsService.updateProject(projectId),
+        "Building maven projects...",
+        "Maven projects successfully built",
+        "Maven projects build  failed... Check logs"
+      );
+  }
 
   render() {
     if (this.state.actionType === "info") {
@@ -48,8 +69,7 @@ class ProjectMenu extends Component {
     return (
       <Action
         onActionExit={() => this.updateTakingAction("info")}
-        onActionExecuted={() => this.actionExecuted("gitUpdate")}
-        onActionCompleted={() => this.actionCompleted("gitUpdate")}
+        onActionExecuted={() => this.updateGitProjectActionExecution.execute(this.props.selectedProjects)}
         selectedProjects={this.props.selectedProjects}
         actionCompleted={this.state.actionCompleted}
         actionTaken={this.state.actionTaken}
@@ -62,85 +82,13 @@ class ProjectMenu extends Component {
     return (
       <Action
         onActionExit={() => this.updateTakingAction("info")}
-        onActionExecuted={() => this.actionExecuted("mavenBuild")}
-        onActionCompleted={() => this.actionCompleted("mavenBuild")}
+        onActionExecuted={() => this.buildMavenProjectsActionExecution.execute(this.props.selectedProjects)}
         selectedProjects={this.props.selectedProjects}
         actionCompleted={this.state.actionCompleted}
         actionTaken={this.state.actionTaken}
         actionStatusText={this.state.actionStatusText}
       />
     );
-  }
-
-  actionExecuted(actionCode) {
-    if (actionCode === "gitUpdate") {
-      this.updateSelectedGitProjects();
-      return;
-    }
-
-    if (actionCode === "mavenBuild") {
-      this.setState({ actionCompleted: true });
-      return;
-    }
-  }
-
-  updateSelectedGitProjects() {
-    this.setState({
-      actionCompleted: false,
-      actionTaken: true,
-      actionStatusText: "Updating git projects"
-    });
-
-    let resultPromise = null;
-    for (const projectId in this.props.selectedProjects) {
-      if (!this.props.selectedProjects[projectId]) {
-        return;
-      }
-      if (resultPromise === null) {
-        resultPromise = projectsService
-          .updateProject(projectId)
-          .then(result => this.updateGitProjectResultHandler(result));
-      } else {
-        resultPromise = resultPromise.then(prevUpdateResponse =>
-          this.updateNextGitProject(prevUpdateResponse, projectId)
-        );
-      }
-    }
-    if (resultPromise != null) {
-      resultPromise.then(lastUpdateStatus => {
-        this.setState({
-          actionCompleted: true,
-          actionTaken: false,
-          actionStatusText:
-            lastUpdateStatus === "success"
-              ? "Git projects updated successfully"
-              : "Git projects update failed. Check logs for more info"
-        });
-      });
-    }
-  }
-
-  updateGitProject(projectId) {
-    return projectsService
-      .updateProject(projectId)
-      .then((result) => this.updateGitProjectResultHandler(result));
-  }
-
-  updateGitProjectResultHandler(result) {
-    const { status, message } = result;
-    this.setState({ actionStatusText: message });
-    if (status !== "success") {
-    } else {
-      this.setState({ actionCompleted: true });
-    }
-    return status;
-  }
-
-  updateNextGitProject(prevProjectStatus, projectId) {
-    if (prevProjectStatus !== "success") {
-      return;
-    }
-    return this.updateGitProjectResultHandler(projectId);
   }
 
   updateTakingAction(actionCode) {
