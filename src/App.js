@@ -16,8 +16,7 @@ class App extends Component {
   state = {
     navbarItems: [
       { code: this.PROJECT_CONTAINER_CODE, label: "Projects", active: true },
-      { code: this.SETTINGS_CONTAINER_CODE, label: "Settings", active: false },
-      { code: this.LOGS_CONTAINER_CODE, label: "Logs", active: false }
+      { code: this.SETTINGS_CONTAINER_CODE, label: "Settings", active: false }
     ]
   };
 

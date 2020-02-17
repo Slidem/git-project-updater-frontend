@@ -1,10 +1,7 @@
-export function getSettings() {
-  return {
-    gitCredentials: {
-      username: "asdf",
-      password: "asdf"
-    },
-    projectsType: "maven",
-    projectsRootDirecto1ries: "/home/slidem/Development/git-sources"
-  };
+import * as apiRegistry from "../registry/apiRegistry";
+import httpService from "./httpService";
+
+export async function getSettings() {
+  const p = await httpService.get(apiRegistry.getProjectsUrl() + "/settings");
+  return p.data;
 }

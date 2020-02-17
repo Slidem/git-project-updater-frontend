@@ -5,9 +5,16 @@ import * as settingsService from "../services/settingsService";
 import NavbarDefinedComponent from "./fromNavbarComponent";
 
 class Settings extends NavbarDefinedComponent {
-  render() {
-    let settings = this.getSettings();
+  state = {
+    settings: {
+      gitUsername: "",
+      gitPassword: "",
+      projectType: "",
+      projectsRootDirectories: ""
+    }
+  };
 
+  render() {
     return (
       <div className="settings-container mx-auto">
         <div className="row">
@@ -24,32 +31,38 @@ class Settings extends NavbarDefinedComponent {
         </div>
         <div className="row">
           <div className="col-sm">Git username</div>
-          <div className="col-sm">{settings.gitUsername}</div>
+          <div className="col-sm">{this.state.settings.gitUsername}</div>
         </div>
         <div className="row">
           <div className="col-sm">Git password</div>
-          <div className="col-sm">{settings.gitPassword}</div>
+          <div className="col-sm">{this.state.settings.gitPassword}</div>
         </div>
         <div className="row">
           <div className="col-sm">Projects type</div>
-          <div className="col-sm">{settings.projectType}</div>
+          <div className="col-sm">{this.state.settings.projectType}</div>
         </div>
         <div className="row">
           <div className="col-sm">Projects root directory</div>
-          <div className="col-sm">{settings.projectsRootDirectories}</div>
+          <div className="col-sm">
+            {this.state.settings.projectsRootDirectories}
+          </div>
         </div>
       </div>
     );
   }
 
-  getSettings() {
-    const settings = settingsService.getSettings();
-    return {
-      gitUsername: settings.gitCredentials.username,
-      gitPassword: settings.gitCredentials.password,
-      projectType: settings.projectsType,
-      projectsRootDirectories: settings.projectsRootDirectories
-    };
+  componentDidMount() {
+    settingsService.getSettings().then(result => {
+      console.log(result);
+      this.setState({
+        settings: {
+          gitUsername: result.gitCredentials.username,
+          gitPassword: result.gitCredentials.password,
+          projectType: result.projectsType,
+          projectsRootDirectories: result.projectsRootDirectories
+        }
+      });
+    });
   }
 }
 

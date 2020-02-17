@@ -1,5 +1,4 @@
 export default class ProjectActionExecution {
-
   constructor(
     component,
     asyncProjectAction,
@@ -34,10 +33,7 @@ export default class ProjectActionExecution {
         );
       } else {
         resultPromise = resultPromise.then(prevUpdateResponse =>
-          this.executeNextActionResultHandler(
-            prevUpdateResponse.status,
-            projectId
-          )
+          this.executeNextActionResultHandler(prevUpdateResponse, projectId)
         );
       }
     }
@@ -45,8 +41,9 @@ export default class ProjectActionExecution {
     if (resultPromise != null) {
       resultPromise.then(lastResult => {
         this.projectActionResultHandler(lastResult);
+
         this.sleepForOneSecond().then(() => {
-            this.component.setState({
+          this.component.setState({
             actionCompleted: true,
             actionTaken: false,
             actionStatusText:
@@ -64,11 +61,14 @@ export default class ProjectActionExecution {
     return result;
   }
 
-  executeNextActionResultHandler(prevStatus, projectId) {
-    if (prevStatus !== "success") {
-      return;
+  executeNextActionResultHandler(prevResponse, projectId) {
+    if (prevResponse.status !== "success") {
+      return prevResponse;
     }
-    return this.asyncProjectAction(projectId).then(result => this.projectActionResultHandler(result));
+
+    return this.asyncProjectAction(projectId).then(result =>
+      this.projectActionResultHandler(result)
+    );
   }
 
   sleepForOneSecond() {
@@ -77,5 +77,4 @@ export default class ProjectActionExecution {
       return;
     });
   }
-
 }
